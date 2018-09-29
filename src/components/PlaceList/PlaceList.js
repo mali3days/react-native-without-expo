@@ -3,7 +3,7 @@ import {FlatList,StyleSheet} from 'react-native';
 
 import ListItem from '../ListItem/ListItem';
 
-const placeList = ({places,onItemDeleted}) => {
+const placeList = ({places,onItemSelected}) => {
     return (
         <FlatList
             data={places}
@@ -11,7 +11,7 @@ const placeList = ({places,onItemDeleted}) => {
             renderItem={({item}) => {
                 return (<ListItem
                     item={item}
-                    onItemPressed={() => onItemDeleted(item.key)}
+                    onItemPressed={() => onItemSelected(item.key)}
                 />);
             }}
         />

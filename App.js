@@ -11,11 +11,13 @@ import {StyleSheet,View} from 'react-native';
 
 import PlaceInput from './src/components/PlaceInput/PlaceInput';
 import PlaceList from './src/components/PlaceList/PlaceList';
+import PlaceDetail from './src/components/PlaceDetail/PlaceDetail';
 
 type Props = {};
 export default class App extends Component<Props> {
   state = {
     places: [],
+    selectedPlace: null,
   };
 
   placeAddedHandler = placeName => {
@@ -32,21 +34,41 @@ export default class App extends Component<Props> {
     });
   }
 
-  onItemDeletedHandler = itemKey => {
+  onItemSelectedHandler = itemKey => {
     this.setState(prevState => {
       return {
-        places: prevState.places.filter(place => place.key !== itemKey),
+        selectedPlace: prevState.places.find(place => place.key === itemKey),
       };
     });
   }
 
+  placeDeleteHandler = () => {
+    this.setState(prevState => {
+      return {
+        places: prevState.places.filter(place => place.key !== prevState.selectedPlace.key),
+        selectedPlace: null,
+      };
+    });
+  }
+
+  modalCloseHandler = () => {
+    this.setState({
+      selectedPlace: null,
+    });
+  }
+ 
   render() {
-    const {places} = this.state;
+    const {places,selectedPlace} = this.state;
 
     return (
       <View style={styles.container}>
-        <PlaceInput onPlaceAdded={this.placeAddedHandler} />
-        <PlaceList places={places} onItemDeleted={this.onItemDeletedHandler}/>
+        <PlaceDetail
+          place={selectedPlace}
+          onItemDelete={this.placeDeleteHandler}
+          onModalClose={this.modalCloseHandler}
+        />
+        <PlaceInput onPlaceAdded={this.placeAddedHandler}/>
+        <PlaceList places={places} onItemSelected={this.onItemSelectedHandler}/>
       </View>
     );
   }
