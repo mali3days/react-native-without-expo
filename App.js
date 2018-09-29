@@ -24,7 +24,9 @@ export default class App extends Component<Props> {
         places: prevState.places.concat({
           key: Math.random().toString(),
           name: placeName,
-          image: require('./src/images/sharm-el-sheikh_1.jpg'),
+          image: {
+            uri: 'https://www.telegraph.co.uk/content/dam/Travel/leadAssets/24/49/sharm-thomson2_2449064a.jpg?imwidth=450',
+          },
         }),
       };
     });
