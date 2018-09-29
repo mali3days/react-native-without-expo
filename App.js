@@ -21,7 +21,11 @@ export default class App extends Component<Props> {
   placeAddedHandler = placeName => {
     this.setState(prevState => {
       return {
-        places: prevState.places.concat({value: placeName, key: Math.random().toString()}),
+        places: prevState.places.concat({
+          key: Math.random().toString(),
+          name: placeName,
+          image: require('./src/images/sharm-el-sheikh_1.jpg'),
+        }),
       };
     });
   }

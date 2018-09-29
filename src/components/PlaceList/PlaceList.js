@@ -10,7 +10,7 @@ const placeList = ({places,onItemDeleted}) => {
             style={styles.listContainer}
             renderItem={({item}) => {
                 return (<ListItem
-                    item={item.value}
+                    item={item}
                     onItemPressed={() => onItemDeleted(item.key)}
                 />);
             }}
