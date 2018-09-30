@@ -8,57 +8,33 @@
 
 import React, {Component} from 'react';
 import {StyleSheet,View} from 'react-native';
+import {connect} from 'react-redux';
 
 import PlaceInput from './src/components/PlaceInput/PlaceInput';
 import PlaceList from './src/components/PlaceList/PlaceList';
 import PlaceDetail from './src/components/PlaceDetail/PlaceDetail';
+import { addPlace, deletePlace, selectPlace, deselectPlace } from './src/store/actions/index';
 
 type Props = {};
-export default class App extends Component<Props> {
-  state = {
-    places: [],
-    selectedPlace: null,
-  };
-
+class App extends Component<Props> {
   placeAddedHandler = placeName => {
-    this.setState(prevState => {
-      return {
-        places: prevState.places.concat({
-          key: Math.random().toString(),
-          name: placeName,
-          image: {
-            uri: 'https://www.telegraph.co.uk/content/dam/Travel/leadAssets/24/49/sharm-thomson2_2449064a.jpg?imwidth=450',
-          },
-        }),
-      };
-    });
+    this.props.onAddPlace(placeName);
   }
 
   onItemSelectedHandler = itemKey => {
-    this.setState(prevState => {
-      return {
-        selectedPlace: prevState.places.find(place => place.key === itemKey),
-      };
-    });
+    this.props.onSelectPlace(itemKey);
   }
 
   placeDeleteHandler = () => {
-    this.setState(prevState => {
-      return {
-        places: prevState.places.filter(place => place.key !== prevState.selectedPlace.key),
-        selectedPlace: null,
-      };
-    });
+    this.props.onDeletePlace();
   }
 
   modalCloseHandler = () => {
-    this.setState({
-      selectedPlace: null,
-    });
+    this.props.onDeselectPlace();
   }
  
   render() {
-    const {places,selectedPlace} = this.state;
+    const {places,selectedPlace} = this.props;
 
     return (
       <View style={styles.container}>
@@ -89,3 +65,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
 });
+
+const mapStateToProps = state => {
+  return {
+    places: state.places.places,
+    selectedPlace: state.places.selectedPlace,
+  };
+}
+
+const mapDisppatchToProps = dispatch => {
+  return {
+    onAddPlace: (name) => dispatch(addPlace(name)),
+    onDeletePlace: () => dispatch(deletePlace()),
+    onSelectPlace: (key) => dispatch(selectPlace(key)),
+    onDeselectPlace: () => dispatch(deselectPlace()),
+  };
+}
+
+export default connect(mapStateToProps, mapDisppatchToProps)(App); 
