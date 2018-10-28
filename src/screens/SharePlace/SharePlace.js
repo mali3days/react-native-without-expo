@@ -10,6 +10,10 @@ import PickImage from '../../components/PickImage/PickImage';
 import PickLocation from '../../components/PickLocation/PickLocation';
 
 class SharePlaceScreen extends PureComponent {
+    state = {
+        placeName: '',
+    }
+
     constructor(props) {
         super(props);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
@@ -27,18 +31,32 @@ class SharePlaceScreen extends PureComponent {
     }
 
     placeAddedHandler = (placeName) => {
-        this.props.onAddPlace(placeName);
+        if (this.state.placeName.trim() === '') return;
+        this.props.onAddPlace(this.state.placeName);
+    }
+
+    placeNameChangeHandler = placeName => {
+        this.setState({ placeName })
     }
 
     render() {
+        const { placeName } = this.state;
         return (
             <ScrollView>
                 <View style={styles.container}>
                     <MaintText><HeadingText>Share a Place with us!</HeadingText></MaintText>
-                    <PickImage/>
-                    <PickLocation/>
-                    <PlaceInput />
-                    <View style={styles.button}><Button title="Share the Place!" /></View>
+                    <PickImage />
+                    <PickLocation />
+                    <PlaceInput
+                        value={placeName}
+                        onChangeText={this.placeNameChangeHandler}
+                    />
+                    <View style={styles.button}>
+                        <Button
+                            title="Share the Place!"
+                            onPress={this.placeAddedHandler}
+                        />
+                    </View>
                 </View>
             </ScrollView>
         );
